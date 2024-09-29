@@ -1,0 +1,169 @@
+TransactionType Enum
+/**
+ * The TransactionType enum represents the types of transactions
+ * that can occur in a personal bank account.
+ * 
+ * <p>It includes two types:</p>
+ * <ul>
+ *   <li>DEPOSIT - Represents a deposit transaction</li>
+ *   <li>WITHDRAWAL - Represents a withdrawal transaction</li>
+ * </ul>
+ */
+public enum TransactionType {
+    DEPOSIT,   // A deposit transaction
+    WITHDRAWAL // A withdrawal transaction
+}
+
+Amount Class
+/**
+ * The Amount class represents a transaction amount for a personal account.
+ * It stores the amount and the type of transaction (DEPOSIT or WITHDRAWAL).
+ * 
+ * <p>This class works with the TransactionType enum to indicate the nature of the transaction.</p>
+ */
+public class Amount {
+    private double amount;               // The transaction amount
+    private TransactionType transactionType;  // The type of transaction (DEPOSIT or WITHDRAWAL)
+
+    /**
+     * Constructs an Amount object with the specified amount and transaction type.
+     * 
+     * @param amount          The transaction amount.
+     * @param transactionType The type of transaction (DEPOSIT or WITHDRAWAL).
+     */
+    public Amount(double amount, TransactionType transactionType) {
+        this.amount = amount;
+        this.transactionType = transactionType;
+    }
+
+    /**
+     * Gets the amount of the transaction.
+     * 
+     * @return The transaction amount.
+     */
+    public double getAmount() {
+        return amount;
+    }
+
+    /**
+     * Gets the type of the transaction.
+     * 
+     * @return The transaction type (DEPOSIT or WITHDRAWAL).
+     */
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    /**
+     * Returns a string representation of the transaction, indicating 
+     * the transaction type and the amount.
+     * 
+     * @return A string in the format "TRANSACTION_TYPE: AMOUNT".
+     */
+    @Override
+    public String toString() {
+        return transactionType + ": " + amount;
+    }
+}
+
+PersonalAccount Class
+import java.util.ArrayList;
+
+/**
+ * The PersonalAccount class represents a personal bank account.
+ * It stores the account number, the account holder's name, the current balance, 
+ * and an array of transactions.
+ * 
+ * <p>This class provides methods for depositing money, withdrawing money, 
+ * retrieving the current balance, and printing the transaction history.</p>
+ */
+public class PersonalAccount {
+    private int accountNumber;                   // A unique identifier for the account
+    private String accountHolder;                // The name of the account holder
+    private double balance;                      // The current balance in the account
+    private ArrayList<Amount> transactions;      // List of transactions (deposit/withdrawal)
+
+    /**
+     * Constructs a PersonalAccount object with the specified account number and holder's name.
+     * The initial balance is set to 0.0, and the transactions list is initialized.
+     * 
+     * @param accountNumber The unique identifier for the account.
+     * @param accountHolder The name of the account holder.
+     */
+    public PersonalAccount(int accountNumber, String accountHolder) {
+        this.accountNumber = accountNumber;
+        this.accountHolder = accountHolder;
+        this.balance = 0.0; // Initially the balance is 0.0
+        this.transactions = new ArrayList<>();
+    }
+
+    /**
+     * Deposits money into the account by creating a DEPOSIT transaction.
+     * The balance is updated accordingly.
+     * 
+     * @param amount The amount to deposit. Must be positive.
+     */
+    public void deposit(double amount) {
+        if (amount > 0) {
+            this.balance += amount;
+            Amount transaction = new Amount(amount, TransactionType.DEPOSIT);
+            this.transactions.add(transaction);
+        } else {
+            System.out.println("Deposit amount must be positive.");
+        }
+    }
+
+    /**
+     * Withdraws money from the account by creating a WITHDRAWAL transaction.
+     * The balance is updated only if the withdrawal amount does not exceed the current balance.
+     * 
+     * @param amount The amount to withdraw. Must be positive and not exceed the balance.
+     */
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            this.balance -= amount;
+            Amount transaction = new Amount(amount, TransactionType.WITHDRAWAL);
+            this.transactions.add(transaction);
+        } else {
+            System.out.println("Insufficient balance or invalid amount.");
+        }
+    }
+
+    /**
+     * Prints the history of transactions (both deposits and withdrawals) associated with the account.
+     * Each transaction is displayed with its type and amount.
+     */
+    public void printTransactionHistory() {
+        for (Amount transaction : transactions) {
+            System.out.println(transaction);
+        }
+    }
+
+    /**
+     * Retrieves the current balance of the account.
+     * 
+     * @return The current balance in the account.
+     */
+    public double getBalance() {
+        return this.balance;
+    }
+
+    /**
+     * Retrieves the unique account number of the account.
+     * 
+     * @return The account number.
+     */
+    public int getAccountNumber() {
+        return this.accountNumber;
+    }
+
+    /**
+     * Retrieves the name of the account holder.
+     * 
+     * @return The account holder's name.
+     */
+    public String getAccountHolder() {
+        return this.accountHolder;
+    }
+}
+
